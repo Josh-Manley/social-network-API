@@ -15,8 +15,8 @@ const userSchema = new Schema(
       },
       required: [true, 'Email required'],
     },
-    thoughts: [{ type: Schema.Types.ObjectId, ref: 'thought' }],
-    friends: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+    thoughts: [{ type: Schema.Types.ObjectId, ref: 'Thoughts' }],
+    friends: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   },
   {
     toJSON: {
