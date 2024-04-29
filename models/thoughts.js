@@ -1,6 +1,11 @@
-const { ObjectId } = require('bson');
 const { Schema, model, Types } = require('mongoose');
-const { type } = require('os');
+
+const reactionSchema = new Schema({
+  reactionId: { type: Types.ObjectId, default: () => new Types.ObjectId() },
+  reactionBody: { type: String, required: true, maxlength: 280 },
+  username: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
 
 const thoughtSchema = new Schema(
   {
@@ -16,17 +21,10 @@ const thoughtSchema = new Schema(
   }
 );
 
-const reactionSchema = new Schema({
-  reactionId: { type: Types.ObjectId, default: () => new Types.ObjectId() },
-  reactionBody: { type: String, required: true, maxlength: 280 },
-  username: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
-});
-
 thoughtSchema.virtual('reactionCount').get(function () {
   return this.reactions.length;
 });
 
-const Thought = model('thought', thoughtSchema);
+const Thought = model('Thought', thoughtSchema);
 
 module.exports = Thought;
