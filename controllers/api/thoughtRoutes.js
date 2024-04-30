@@ -14,7 +14,7 @@ router.get('/:thoughtId', async (req, res) => {
   try {
     const thoughtData = await Thought.findOne({ _id: req.params.thoughtId });
     if (!thoughtData) {
-      return res.status(404).json({ message: 'No though with that id' });
+      return res.status(404).json({ message: 'No thought with that id' });
     }
     res.json(thoughtData);
   } catch (err) {
@@ -74,6 +74,28 @@ router.delete('/:thoughtId', async (req, res) => {
   }
 });
 
+// POST to create a new reaction for a specific thought
+router.post('/:thoughtId/reactions', async (req, res) => {
+  try {
+    const { thoughtId } = req.params;
+    const { reactionBody, username } = req.body;
 
+    // Find the thought by thoughtId
+    const thought = await Thought.findById(thoughtId);
+    if (!thought) {
+      return res.status(404).json({ message: 'Thought not found' });
+    }
+
+    // Create a new reaction
+    const newReaction = { reactionBody, username };
+    thought.reactions.push(newReaction);
+    await thought.save();
+
+    // Return the updated thought with reactions in the response
+    res.json(thought);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;
