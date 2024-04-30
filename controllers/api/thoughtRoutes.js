@@ -49,4 +49,31 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.put('/:thoughtId', async (req, res) => {
+  try {
+    const thoughtId = req.params.thoughtId;
+    const thoughtUpdate = await Thought.findByIdAndUpdate(thoughtId, req.body, { new: true });
+
+    if (!thoughtUpdate) {
+      return res.status(404).json({ message: 'No thought with that id' });
+    }
+
+    res.json(thoughtUpdate);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.delete('/:thoughtId', async (req, res) => {
+  try {
+    const thoughtId = req.params.thoughtId;
+    const thoughtDelete = await Thought.findByIdAndDelete(thoughtId);
+    res.json(thoughtDelete);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+
 module.exports = router;
