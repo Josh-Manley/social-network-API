@@ -5,8 +5,8 @@
   <a id="description"></a>
   ## Description
   API for a social network web application where users can share their thoughts, react to friends’ thoughts, and create a friend list. using express.js for routing, a MongoDB database, and the Mongoose ODM.
-  ## Video
-  https://screenrec.com/share/3bEfiA2uBv
+  ## Videos
+  CRUD routes for insomnia video link -> https://screenrec.com/share/3bEfiA2uBv
   video link for starting server -> https://screenrec.com/share/fAQi9R2xnb
   
   ## Table of Contents
