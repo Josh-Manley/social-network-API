@@ -67,12 +67,30 @@ router.put('/:thoughtId', async (req, res) => {
 router.delete('/:thoughtId', async (req, res) => {
   try {
     const thoughtId = req.params.thoughtId;
+
+    // Find and delete the thought
     const thoughtDelete = await Thought.findByIdAndDelete(thoughtId);
+    
+    if (!thoughtDelete) {
+      return res.status(404).json({ message: 'Thought not found' });
+    }
+
+    // Find the user who owns the thought
+    const user = await User.findOne({ thoughts: thoughtId });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Remove the thought ID from the user's thoughts array
+    user.thoughts = user.thoughts.filter(id => id.toString() !== thoughtId);
+    await user.save();
+
     res.json(thoughtDelete);
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
 
 // POST to create a new reaction for a specific thought
 router.post('/:thoughtId/reactions', async (req, res) => {
