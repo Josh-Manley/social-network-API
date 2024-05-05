@@ -83,6 +83,8 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
     // Add the friend to the user's friends array
     if (!user.friends.includes(friendId)) {
       user.friends.push(friendId);
+      friend.friends.push(user);
+      await friend.save();
       await user.save();
     }
 
@@ -103,6 +105,11 @@ router.delete('/:userId/friends/:friendId', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    const friend = await User.findById(friendId);
+    if (!friend) {
+      return res.status(404).json({ message: 'Friend not found' });
+    }
+
     // Check if the friendId exists in the user's friends array
     if (!user.friends.includes(friendId)) {
       return res.status(404).json({ message: 'Friend not found in user\'s friend list' });
@@ -110,6 +117,8 @@ router.delete('/:userId/friends/:friendId', async (req, res) => {
 
     // Remove the friendId from the user's friends array
     user.friends = user.friends.filter(id => id.toString() !== friendId);
+    friend.friends = friend.friends.filter(id => id.toString() !== userId);
+    await friend.save();
     await user.save();
 
     res.json(user);
